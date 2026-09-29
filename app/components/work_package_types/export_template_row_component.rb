@@ -33,6 +33,7 @@ module WorkPackageTypes
     include ApplicationHelper
     include OpPrimer::ComponentHelpers
     include OpTurbo::Streamable
+    include SortableLists::MoveMenu
 
     def initialize(variant:, template:, readonly: false)
       super

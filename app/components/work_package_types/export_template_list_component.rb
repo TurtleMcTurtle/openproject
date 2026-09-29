@@ -47,26 +47,44 @@ module WorkPackageTypes
       return {} if @readonly
 
       {
-        controller: "generic-drag-and-drop"
+        controller: "sortable-lists",
+        sortable_lists_move_url_template_value: move_url_template,
+        sortable_lists_sortable_lists__list_outlet: "##{wrapper_key} [data-controller~='sortable-lists--list']",
+        sortable_lists_sortable_lists__item_outlet: "##{wrapper_key} [data-controller~='sortable-lists--item']"
       }
     end
 
-    def drag_and_drop_target_config
+    # Built from the route helper with a sentinel so relative-URL-root
+    # installations keep working; {id} is expanded client-side.
+    def move_url_template
+      id_placeholder = "__id__"
+      helpers.move_type_pdf_export_template_path(**@variant.path_args, id: id_placeholder).sub(id_placeholder, "{id}")
+    end
+
+    def list_data
+      return {} if @readonly
+
       {
-        generic_drag_and_drop_target: "container",
-        target_container_accessor: ":scope > ul",
-        target_allowed_drag_type: "template",
-        test_selector: "pdf-export-template-rows"
+        controller: "sortable-lists--list",
+        sortable_lists__list_type_value: sortable_list_type,
+        sortable_lists__list_accepted_type_value: sortable_list_type,
+        sortable_lists__list_name_value: I18n.t("types.edit.export_configuration.pdf_export_templates.label")
       }
     end
 
-    def draggable_item_config(template)
+    def item_data(template)
+      return {} if @readonly
+
       {
-        draggable_id: template.id,
-        draggable_type: "template",
-        drop_url: drop_type_pdf_export_template_path(**@variant.path_args, id: template.id),
-        test_selector: "pdf-export-template-row-#{template.id}"
+        controller: "sortable-lists--item",
+        sortable_lists__item_id_value: template.id,
+        sortable_lists__item_type_value: sortable_list_type,
+        sortable_lists__item_label_value: template.label
       }
+    end
+
+    def sortable_list_type
+      "pdf_export_templates"
     end
   end
 end
