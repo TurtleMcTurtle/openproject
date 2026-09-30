@@ -29,9 +29,10 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { screen } from '@testing-library/dom';
+import { fireEvent, screen } from '@testing-library/dom';
 import { WorkPackageSubjectComponent } from './wp-subject.component';
 import { EditableAttributeFieldComponent } from 'core-app/shared/components/fields/edit/field/editable-attribute-field.component';
+import { EditFormComponent } from 'core-app/shared/components/fields/edit/edit-form/edit-form.component';
 import {
   HalResourceEditingService,
 } from 'core-app/shared/components/fields/edit/services/hal-resource-editing.service';
@@ -57,10 +58,17 @@ describe('WorkPackageSubjectComponent', () => {
       declarations: [WorkPackageSubjectComponent, EditableAttributeFieldComponent],
       providers: [
         { provide: ApiV3Service, useValue: {} },
-        { provide: OPContextMenuService, useValue: {} },
+        { provide: OPContextMenuService, useValue: { close: () => undefined } },
         { provide: States, useValue: {} },
         { provide: I18nService, useValue: { t: (key:string) => key } },
         { provide: SchemaCacheService, useValue: { of: () => schemaStub } },
+        {
+          provide: EditFormComponent,
+          useValue: {
+            register: () => undefined,
+            activate: () => Promise.resolve(),
+          },
+        },
         {
           provide: HalResourceEditingService,
           useValue: {
@@ -84,8 +92,16 @@ describe('WorkPackageSubjectComponent', () => {
   it('renders the work package subject as a level 2 heading', () => {
     const subject = 'Add some angular tests for wp-subject';
     render({ subject });
-    const heading = screen.getByRole('heading', { level: 2, name: subject });
 
-    expect(heading).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: subject })).toBeInTheDocument();
+  });
+
+  it('keeps the accessible heading while editing', () => {
+    const subject = 'Add some angular tests for wp-subject';
+    render({ subject });
+
+    fireEvent.click(screen.getByRole('button', { name: `subject ${subject}`}));
+
+    expect(screen.getByRole('heading', { level: 2, name: subject })).toBeInTheDocument();
   });
 });
