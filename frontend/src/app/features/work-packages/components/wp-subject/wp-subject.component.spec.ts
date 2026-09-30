@@ -37,7 +37,7 @@ import {
 } from 'core-app/shared/components/fields/edit/services/hal-resource-editing.service';
 import { SchemaCacheService } from 'core-app/core/schemas/schema-cache.service';
 import { DisplayFieldService } from 'core-app/shared/components/fields/display/display-field.service';
-import { stubDisplayFieldService } from 'core-app/shared/components/fields/display/testing/stub-display-field';
+import { initializeCoreDisplayFields } from 'core-app/shared/components/fields/display/display-field.initializer';
 import { OPContextMenuService } from 'core-app/shared/components/op-context-menu/op-context-menu.service';
 import { States } from 'core-app/core/states/states.service';
 import { I18nService } from 'core-app/core/i18n/i18n.service';
@@ -68,9 +68,10 @@ describe('WorkPackageSubjectComponent', () => {
             typedState: () => ({ hasValue: () => false }),
           },
         },
-        { provide: DisplayFieldService, useValue: stubDisplayFieldService() },
       ],
     }).compileComponents();
+
+    initializeCoreDisplayFields(TestBed.inject(DisplayFieldService))();
   });
 
   function render(wpOverrides:Partial<WorkPackageResource> = {}):ComponentFixture<WorkPackageSubjectComponent> {
