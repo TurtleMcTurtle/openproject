@@ -44,7 +44,7 @@
     "@types/resize-observer-browser": "^0.1.4",
     "@types/urijs": "^1.19.26",
     "@typescript-eslint/eslint-plugin": "8.72.2",
-    "@typescript-eslint/parser": "8.72.2",
+    "@typescript-eslint/parser": "8.74.0",
     "@vitest/browser-playwright": "^5.1.0",
     "@vitest/coverage-v8": "^5.1.0",
     "@vitest/eslint-plugin": "^1.6.28",
@@ -62,7 +62,7 @@
     "source-map-explorer": "^2.5.2",
     "ts-node": "~10.9.2",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.72.2",
+    "typescript-eslint": "^8.74.0",
     "vitest": "^5.1.0",
     "wscat": "^6.1.0"
   },
